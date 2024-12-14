@@ -1,0 +1,122 @@
+@font-face {
+    font-family: "IRANYekan-Regular";
+    src: url('../fonts/IRANYekanXFaNum-Regular.woff') format("woff");
+}
+
+@font-face {
+    font-family: "IRANYekan-Bold";
+    src: url('../fonts/IRANYekanXFaNum-Bold.woff') format("woff");
+}
+
+html {
+    scroll-behavior: smooth;
+    direction: rtl;
+}
+
+body {
+    font-family: "IRANYekan-Regular";
+    user-select: none;
+}
+
+#video {
+    height: 100vh;
+}
+
+/* max-width */
+.max-w-592 {
+    max-width: 592px;
+    width: 100%;
+}
+
+/* width */
+.w-58 {
+    width: 58px;
+}
+
+/* height */
+.h-58 {
+    height: 58px;
+}
+
+.h-184 {
+    height: 184px;
+}
+
+/* padding */
+.pl-30 {
+    padding-left: 30px;
+}
+
+/* rotate */
+.-rotate-90 {
+    transform: rotate(-90deg);
+}
+
+.rotate-90 {
+    transform: rotate(90deg);
+}
+
+/* border radius */
+.rounded-12 {
+    border-radius: 12px;
+}
+
+/* border */
+.border-gray {
+    border: 1px solid #34343d;
+}
+
+/* background */
+.bg-dark-transparent {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), linear-gradient(rgba(27, 27, 31, 0.6) 0%, rgb(27, 27, 31) 100%);
+}
+
+/* blur */
+.backdrop-blur {
+    --tw-backdrop-blur: blur(8px);
+}
+
+/* cursor */
+.cursor {
+    cursor: pointer;
+}
+/* next && prev button */
+#prevButton,#prevButton svg path,#nextButton,#nextButton svg path{
+ transition: all .4s;
+}
+#prevButton:active,#nextButton:active{
+    transform: scale(.95);
+}
+#prevButton:hover,#nextButton:hover{
+    background-color: #3e4f59a1!important;
+}
+#prevButton:hover svg path,#nextButton:hover svg path{
+    fill: #0177c0;
+}
+/* progressBar */
+#progressBarBox {
+    width: 2px;
+    height: 87%;
+    background-color: #434344;
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    border-radius: 5px;
+}
+
+#progressBar {
+    appearance: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 0%;
+    width: 4px;
+    background-color: #1791d7;
+    box-shadow: 0 0 16px 2px #1791d7;
+    left: .9px;
+    position: relative;
+}
+@media only screen and (max-width:576px) {
+    .max-w-sm-84{
+        width: 94%;
+    }
+}
