@@ -13,10 +13,12 @@
 
   <main>
     <section class="position-relative">
-      <video class="w-100" id="video" src="assets/img/64ad88885b273.mp4" muted></video>
+      <video class="w-100" id="video" muted>
+        <source src="assets/img/banners.mp4" type="video/mp4">
+      </video>
       <div class="container-fluid">
         <div
-          class="d-flex align-items-center gap-4 mb-5 position-absolute bottom-0 p-4 backdrop-blur bg-dark-transparent position-relative rounded-12 max-w-sm-84 max-w-592">
+          class="d-flex align-items-center gap-4 mb-5 position-absolute bottom-0 p-4 backdrop-blur bg-dark-transparent position-relative rounded-12 max-w-592">
           <div>
             <button id="prevButton"
               class="cursor w-58 h-58 d-flex align-items-center justify-content-center border-gray rounded-12 bg-transparent">
@@ -52,10 +54,11 @@
             </button>
           </div>
           <div class="text-white fw-bold pl-30">
-            <div class="text-start">
+            <div class="text-start fade-in" id="textContent">
               <h3 class="fw-bold" id="titleDisplay">WebDesign services</h3>
               <p id="textDisplay" class="text-white-50">
-                Cost-effective delivery, and a broad and independent global portfolio of local suppliers, lets you choose the content you need, free of provider ecosystem restrictions.
+                Cost-effective delivery, and a broad and independent global portfolio of local suppliers, lets you
+                choose the content you need, free of provider ecosystem restrictions.
               </p>
             </div>
           </div>
@@ -78,32 +81,35 @@
     const textDisplay = document.getElementById('textDisplay');
 
     // Array of text content for different video times
-const textSteps = [
-  { time: 0, title: "WebDesign services", text: "Cost-effective delivery, and a broad and independent global portfolio of local suppliers, lets you choose the content you need, free of provider ecosystem restrictions." },
-  { time: 10, title: "Graphic services", text: "Cost-effective delivery, and independent global portfolio of local suppliers, lets you choose the content you need, free of provider ecosystem restrictions." },
-  { time: 20, title: "Seo services", text: "Cost-effective delivery, lets you choose the content you need, free of provider ecosystem restrictions." },
-  { time: 30, title: "Digital Marketing services", text: "Cost-effective delivery, global portfolio of local suppliers, lets you choose the content you need, free of provider ecosystem restrictions." },
-  { time: 40, title: "Content Production services", text: "a broad and independent global portfolio of local suppliers, lets you choose the content you need, free of provider ecosystem restrictions." },
-];
-const threshold = 1; // Update only when close to the exact time
+    const textSteps = [
+      { time: 0, title: "WebDesign services", text: "Cost-effective delivery, and a broad and independent global portfolio of local suppliers, lets you choose the content you need, free of provider ecosystem restrictions." },
+      { time: 6, title: "Graphic services", text: "Cost-effective delivery, and independent global portfolio of local suppliers, lets you choose the content you need, free of provider ecosystem restrictions." },
+      { time: 12, title: "Seo services", text: "Cost-effective delivery, lets you choose the content you need, free of provider ecosystem restrictions." },
+      { time: 18, title: "Digital Marketing services", text: "Cost-effective delivery, global portfolio of local suppliers, lets you choose the content you need, free of provider ecosystem restrictions." },
+      { time: 24, title: "Content Production services", text: "a broad and independent global portfolio of local suppliers, lets you choose the content you need, free of provider ecosystem restrictions." },
+    ];
+    const threshold = 0.5; // Update only when close to the exact time
     // Smooth rewind or forward function
     function smoothSeek(targetTime) {
       const step = 0.1; // Time to adjust in each interval (in seconds)
-      const intervalTime = 100; // Interval duration (in milliseconds)
+      const intervalTime = 60; // Interval duration (in milliseconds)
 
       const currentTime = video.currentTime;
       const direction = targetTime > currentTime ? 1 : -1; // Determine forward or backward
-      const currentStep = textSteps.find(step => 
-      Math.abs(currentTime - step.time) <= threshold
 
-       // Find the last text step that matches the current time
- 
-  );
-  // Update the text display if a matching step is found
-  if (currentStep) {
-    titleDisplay.textContent = currentStep.title;
-    textDisplay.textContent = currentStep.text;
-  }
+      // Find the last text step that matches the current time
+
+      const currentStep = textSteps.find(step =>
+        Math.abs(currentTime - step.time) <= threshold
+      );
+      // Update the text display if a matching step is found
+      if (currentStep) {
+        titleDisplay.textContent = currentStep.title;
+        textDisplay.textContent = currentStep.text;
+        textContent.classList.remove('fade-in');
+    void textContent.offsetWidth; // Trigger reflow to reset animation
+    textContent.classList.add('fade-in');
+      }
 
       const seekInterval = setInterval(() => {
         const newTime = video.currentTime + direction * step;
@@ -121,23 +127,22 @@ const threshold = 1; // Update only when close to the exact time
 
     // Add event listeners for "Previous" and "Next" buttons
     prevButton.addEventListener('click', () => {
-      const newTime = Math.max(video.currentTime - 10, 0); // Rewind by 5 seconds
+      const newTime = Math.max(video.currentTime - 6, 0); // Rewind by 6 seconds
       smoothSeek(newTime);
     });
 
     nextButton.addEventListener('click', () => {
-      const newTime = Math.min(video.currentTime + 10, video.duration); // Forward by 5 seconds
+      const newTime = Math.min(video.currentTime + 6, video.duration); // Forward by 6 seconds
       smoothSeek(newTime);
     });
 
- 
-// Update progress bar as the video plays
-video.addEventListener('timeupdate', () => {
-  const progress = (video.currentTime / video.duration) * 100; // Calculate progress as percentage
-  progressBar.style.height = `${progress}%`; // Update the progress bar height
-});
-// video.addEventListener('play', () => {
-// });
+
+    // Update progress bar as the video plays
+    video.addEventListener('timeupdate', () => {
+      const progress = (video.currentTime / video.duration) * 100; // Calculate progress as percentage
+      progressBar.style.height = `${progress}%`; // Update the progress bar height
+    });
+
   </script>
 </body>
 
