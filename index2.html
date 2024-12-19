@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='stylesheet' type='text/css' media='screen' href='assets/css/bootstrap.min.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='assets/css/styles.css'>
+  <title>Scroll Video Player</title>
+</head>
+
+<body>
+
+  <main>
+    <section class="position-relative">
+      <video class="w-100" id="video" muted>
+        <source src="assets/img/banners.mp4" type="video/mp4">
+      </video>
+      <div class="container-fluid">
+        <div
+          class="d-flex align-items-center gap-4 mb-5 position-absolute bottom-0 p-4 backdrop-blur bg-dark-transparent position-relative rounded-12 max-w-592">
+          <div>
+            <button id="prevButton"
+              class="cursor w-58 h-58 d-flex align-items-center justify-content-center border-gray rounded-12 bg-transparent">
+              <svg class="transition-transform transition-all rotate-90" width="24" height="24" viewBox="0 0 24 24"
+                fill="none">
+                <g clip-path="url(#clip0_736_35759)">
+                  <path
+                    d="M7.828 10.9997H20V12.9997H7.828L13.192 18.3637L11.778 19.7777L4 11.9997L11.778 4.22168L13.192 5.63568L7.828 10.9997Z"
+                    fill="white"></path>
+                </g>
+                <defs>
+                  <clipPath id="clip0_736_35759">
+                    <rect width="24" height="24" fill="currentColor"></rect>
+                  </clipPath>
+                </defs>
+              </svg>
+            </button>
+            <button id="nextButton"
+              class="cursor mt-3 w-58 h-58 d-flex align-items-center justify-content-center border-gray rounded-12 bg-transparent">
+              <svg class="transition-transform transition-all -rotate-90" width="24" height="24" viewBox="0 0 24 24"
+                fill="none">
+                <g clip-path="url(#clip0_736_35759)">
+                  <path
+                    d="M7.828 10.9997H20V12.9997H7.828L13.192 18.3637L11.778 19.7777L4 11.9997L11.778 4.22168L13.192 5.63568L7.828 10.9997Z"
+                    fill="white"></path>
+                </g>
+                <defs>
+                  <clipPath id="clip0_736_35759">
+                    <rect width="24" height="24" fill="currentColor"></rect>
+                  </clipPath>
+                </defs>
+              </svg>
+            </button>
+          </div>
+          <div class="text-white fw-bold pl-30">
+            <div class="text-start fade-in" id="textContent">
+              <h3 class="fw-bold" id="titleDisplay">WebDesign services</h3>
+              <p id="textDisplay" class="text-white-50">
+                Cost-effective delivery, and a broad and independent global portfolio of local suppliers, lets you
+                choose the content you need, free of provider ecosystem restrictions.
+              </p>
+            </div>
+          </div>
+          <div id="progressBarBox">
+            <div id="progressBar"></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Get references to the video and button elements
+    const video = document.getElementById('video');
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+    const progressBar = document.getElementById('progressBar');
+    const textDisplay = document.getElementById('textDisplay');
+    let isAllowClick=true
+    // Array of text content for different video times
+    const textSteps = [
+      { time: 0, title: "WebDesign services", text: "Cost-effective delivery, and a broad and independent global portfolio of local suppliers, lets you choose the content you need, free of provider ecosystem restrictions." },
+      { time: 6, title: "Graphic services", text: "Cost-effective delivery, and independent global portfolio of local suppliers, lets you choose the content you need, free of provider ecosystem restrictions." },
+      { time: 12, title: "Seo services", text: "Cost-effective delivery, lets you choose the content you need, free of provider ecosystem restrictions." },
+      { time: 18, title: "Digital Marketing services", text: "Cost-effective delivery, global portfolio of local suppliers, lets you choose the content you need, free of provider ecosystem restrictions." },
+      { time: 24, title: "Content Production services", text: "a broad and independent global portfolio of local suppliers, lets you choose the content you need, free of provider ecosystem restrictions." },
+    ];
+    const threshold = 0.5; // Update only when close to the exact time
+    // Smooth rewind or forward function
+    function smoothSeek(targetTime,btnType) {
+      const step = 0.1; // Time to adjust in each interval (in seconds)
+      const intervalTime = 60; // Interval duration (in milliseconds)
+      isAllowClick=false
+
+      const currentTime = video.currentTime;
+      const direction = targetTime > currentTime ? 1 : -1; // Determine forward or backward
+      // Find the last text step that matches the current time
+
+      let currentStep = textSteps.find(step =>{
+        return Math.abs(currentTime - step.time) <= threshold
+      }
+      );
+      let isUn=false
+      if(!currentStep&&btnType==="prev"&&targetTime!==0){
+        isUn=true
+        currentStep=textSteps[textSteps.length-2]
+      }
+      // Update the text display if a matching step is found
+      if (currentStep) {
+        titleDisplay.textContent = currentStep.title;
+        textDisplay.textContent = currentStep.text;
+        textContent.classList.remove('fade-in');
+    void textContent.offsetWidth; // Trigger reflow to reset animation
+    textContent.classList.add('fade-in');
+      }
+
+      const seekInterval = setInterval(() => {
+        const newTime = video.currentTime + direction * step;
+
+        // Stop when we reach the target time or exceed bounds
+        if ((direction === 1 && newTime >= targetTime) ||
+          (direction === -1 && newTime <= targetTime)) {
+          video.currentTime = targetTime; // Set final target time
+          if(isUn)
+          video.currentTime = currentStep.time; // Set final target time
+          clearInterval(seekInterval);   // Stop the interval
+          isAllowClick=true
+          video.pause()
+        } else {
+          console.log(235)
+          if(btnType==="prev")
+          video.currentTime = newTime;   // Adjust the current time
+        else
+        video.play()
+
+        }
+    }, intervalTime);
+    }
+
+    // Add event listeners for "Previous" and "Next" buttons
+    prevButton.addEventListener('click', () => {
+      if(!isAllowClick||video.currentTime===0)return
+      const newTime = Math.max(video.currentTime - 6, 0); // Rewind by 6 seconds
+      console.log(newTime)
+      smoothSeek(newTime,"prev");
+    });
+
+    nextButton.addEventListener('click', () => {
+      if(!isAllowClick||video.currentTime===video.duration)return
+      const newTime = Math.min(video.currentTime + 6, video.duration); // Forward by 6 seconds
+      console.log(newTime)
+      smoothSeek(newTime,"next");
+    });
+
+
+    // Update progress bar as the video plays
+    video.addEventListener('timeupdate', () => {
+      const progress = (video.currentTime / video.duration) * 100; // Calculate progress as percentage
+      progressBar.style.height = `${progress}%`; // Update the progress bar height
+    });
+
+  </script>
+</body>
+
+</html>

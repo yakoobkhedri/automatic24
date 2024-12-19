@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen Capture</title>
+</head>
+<body>
+    <button id="startCapture">شروع استریم</button>
+    <video id="screenVideo" autoplay playsinline controls></video>
+
+    <script>
+        const startCaptureButton = document.getElementById("startCapture");
+        const videoElement = document.getElementById("screenVideo");
+
+        startCaptureButton.addEventListener("click", async () => {
+            try {
+                // درخواست برای دسترسی به صفحه‌نمایش
+                const screenStream = await navigator.mediaDevices.getDisplayMedia({
+                    video: true,
+                    audio: false // اگر نیاز به صدای سیستم دارید، آن را true کنید
+                });
+
+                // نمایش استریم در عنصر ویدیو
+                videoElement.srcObject = screenStream;
+
+                // مدیریت پایان استریم
+                screenStream.getVideoTracks()[0].addEventListener("ended", () => {
+                    alert("استریم تمام شد!");
+                });
+            } catch (err) {
+                console.error("خطا در گرفتن استریم:", err);
+            }
+        });
+    </script>
+</body>
+</html>
